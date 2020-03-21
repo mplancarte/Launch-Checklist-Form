@@ -18,7 +18,7 @@ window.addEventListener("load", function() {
          alert ("Enter a valid number");
          event.preventDefault();
       }
-
+      if (isNaN(pilotNameInput.value) === true && isNaN(copilotNameInput.value) === true && isNaN(fuelLevelInput.value) === false && isNaN(cargoMassInput.value) === false){
       document.getElementById("pilotStatus").innerHTML = `
       Pilot ${pilotNameInput.value} is ready for launch
       `;
@@ -33,8 +33,12 @@ window.addEventListener("load", function() {
          document.getElementById("fuelStatus").innerHTML = `
          Fuel level is too low for launch
          `;
+         event.preventDefault();
+      } else {
+         document.getElementById("fuelStatus").innerHTML = "Fuel level high enough for launch";
+         event.preventDefault();
       }
-      
+
       if (cargoMassInput.value > 10000) {
          document.getElementById("faultyItems").style.visibility = "visible";
          document.getElementById("launchStatus").style.color = "red";
@@ -42,7 +46,18 @@ window.addEventListener("load", function() {
          document.getElementById("cargoStatus").innerHTML = `
          Cargo mass too heavy for launch
          `;
+      } else {
+         document.getElementById("cargoStatus").innerHTML = "Cargo mass low enough for launch";
+         event.preventDefault();
       }
+
+      if (isNaN(pilotNameInput.value) === true && isNaN(copilotNameInput.value) === true && fuelLevelInput.value > 10000 && cargoMassInput.value < 10000) {
+         document.getElementById("launchStatus").style.color = "green";
+         document.getElementById("launchStatus").innerHTML = "Shuttle Ready For Launch";
+         // document.getElementById("faultyItems").style.visibility = "hidden";
+      }
+   }
+
    });
 
 });
