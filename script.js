@@ -1,23 +1,40 @@
 // Write your JavaScript code here!
 window.addEventListener("load", function() {
+   fetch("https://handlers.education.launchcode.org/static/planets.json").then(function(response) {
+      response.json().then(function (json) {
+         let index = Math.floor((Math.random()*6))
+         const planet = document.getElementById("missionTarget");
+         planet.innerHTML = `
+         <h2>Mission Destination</h2>
+         <ol>
+            <li>Name: ${json[index].name}</li>
+            <li>Diameter: ${json[index].diameter}</li>
+            <li>Star: ${json[index].star}</li>
+            <li>Distance from Earth: ${json[index].distance}</li>
+            <li>Number of Moons: ${json[index].moons}</li>
+         </ol>
+         <img src="${json[index].image}">
+         `;
+      });
+   });
+
    let form = document.querySelector("form");
    form.addEventListener("submit", function(event){
       let pilotNameInput = document.querySelector("input[name=pilotName]");
       let copilotNameInput = document.querySelector("input[name=copilotName]");
       let fuelLevelInput = document.querySelector("input[name=fuelLevel]");
       let cargoMassInput = document.querySelector("input[name=cargoMass]");
+
       if (pilotNameInput.value === "" || copilotNameInput.value === "" || fuelLevelInput.value === "" || cargoMassInput.value === "") {
          alert ("All fields are required!");
          event.preventDefault();
       }
-      if (isNaN(pilotNameInput.value) === false || isNaN(copilotNameInput.value) === false) {
-         alert ("Enter a valid name using letters A-Z, a-z");
+
+      if (isNaN(pilotNameInput.value) === false || isNaN(copilotNameInput.value) === false || isNaN(fuelLevelInput.value) === true || isNaN(cargoMassInput.value) === true) {
+         alert ("Make sure to enter valid information for each field!");
          event.preventDefault();
       }
-      if (isNaN(fuelLevelInput.value) === true || isNaN(cargoMassInput.value) === true) {
-         alert ("Enter a valid number");
-         event.preventDefault();
-      }
+
       if (isNaN(pilotNameInput.value) === true && isNaN(copilotNameInput.value) === true && isNaN(fuelLevelInput.value) === false && isNaN(cargoMassInput.value) === false){
       document.getElementById("pilotStatus").innerHTML = `
       Pilot ${pilotNameInput.value} is ready for launch
@@ -39,7 +56,7 @@ window.addEventListener("load", function() {
          event.preventDefault();
       }
 
-      if (cargoMassInput.value > 10000) {
+      if (cargoMassInput.value >= 10000) {
          document.getElementById("faultyItems").style.visibility = "visible";
          document.getElementById("launchStatus").style.color = "red";
          document.getElementById("launchStatus").innerHTML = "Shuttle Not Ready for Launch";
@@ -51,25 +68,11 @@ window.addEventListener("load", function() {
          event.preventDefault();
       }
 
-      if (isNaN(pilotNameInput.value) === true && isNaN(copilotNameInput.value) === true && fuelLevelInput.value > 10000 && cargoMassInput.value < 10000) {
+      if (isNaN(pilotNameInput.value) === true && isNaN(copilotNameInput.value) === true && fuelLevelInput.value >= 10000 && cargoMassInput.value <= 10000) {
          document.getElementById("launchStatus").style.color = "green";
          document.getElementById("launchStatus").innerHTML = "Shuttle Ready For Launch";
-         // document.getElementById("faultyItems").style.visibility = "hidden";
+         document.getElementById("faultyItems").style.visibility = "hidden";
       }
    }
-
    });
-
 });
-
-/* This block of code shows how to format the HTML once you fetch some planetary JSON!
-<h2>Mission Destination</h2>
-<ol>
-   <li>Name: ${}</li>
-   <li>Diameter: ${}</li>
-   <li>Star: ${}</li>
-   <li>Distance from Earth: ${}</li>
-   <li>Number of Moons: ${}</li>
-</ol>
-<img src="${}">
-*/
